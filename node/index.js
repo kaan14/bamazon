@@ -3,7 +3,7 @@ var inquirer = require("inquirer");
 require("console.table");
 
 //mysql key here
-var key = "Kaki1403!";
+var key = "";
 
 //create a mysql connection
 var connection = mysql.createConnection({
@@ -70,7 +70,7 @@ function shopping() {
                         return console.log(err);
                     }
                     console.log("QUantity Updated.");
-                    var p = data[0].price * parseInt(answer.quantity);
+                  var p = data[0].price * parseInt(answer.quantity);
                     console.log("Total Price: " + p);
                 });
             }

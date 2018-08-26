@@ -3,7 +3,7 @@ var inquirer = require("inquirer");
 var fs = require("fs");
 require("console.table")
 
-var key = "Kaki1403!";
+var key = "";
 
 //create a mysql connection
 var connection = mysql.createConnection({
@@ -104,7 +104,21 @@ function viewLowQuantity() {
 
 //create a function that adds product to an existing item  
 // function addToInventory() {
+// inquirer.prompt ([
+// {
+//     name: "product", 
+//     type: "input",
+//     message: "Enter product name: "
+// },
 
+// {
+//     name: "department", 
+//     type: "input",
+//     message: "Enter department name: "
+// }
+// ]).then(function(answer){
+//     var quary = "SELECT * FROM bamazon_product WHERE ?"
+// })
 
 // };
 
