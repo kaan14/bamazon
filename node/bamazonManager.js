@@ -45,7 +45,7 @@ function displayInquirer() {
                     break;
 
                 case "Add a item to the existing product line":
-                    //addToInventory();
+                    addToInventory();
                     break;
 
 
@@ -77,22 +77,22 @@ function viewLowQuantity() {
             type: "input",
             message: "Enter an amount to filter products: ",
 
+        }
+    ]).then(function (answer) {
+        var query = "SELECT product_id, product_name, stock_quantity FROM bamazon.products";
+        connection.query(query, function (err, res) {
 
-        }]).then(function (answer) {
-            var query = "SELECT product_id, product_name, stock_quantity FROM bamazon.products";
-            connection.query(query, function (err, res) {
-
-                //loop all the products quantities to determine low quantity ones
-                for (var i = 0; i < res.length; i++) {
-                    if (res[i].stock_quantity < answer.quantity){
-                        console.table(res[i].product_name + res[i].stock_quantity);
-                    }
-
-
+            //loop all the products quantities to determine low quantity ones
+            for (var i = 0; i < res.length; i++) {
+                if (res[i].stock_quantity < answer.quantity) {
+                    console.table(res[i].product_name + res[i].stock_quantity);
                 }
 
-            })
+
+            }
+
         })
+    })
 
 };
 
@@ -103,24 +103,47 @@ function viewLowQuantity() {
 
 
 //create a function that adds product to an existing item  
-// function addToInventory() {
-// inquirer.prompt ([
-// {
-//     name: "product", 
-//     type: "input",
-//     message: "Enter product name: "
-// },
+function addToInventory() {
+    //display product list for manager to select an item 
+    var query = "SELECT * FROM bamazon.products"
 
-// {
-//     name: "department", 
-//     type: "input",
-//     message: "Enter department name: "
-// }
-// ]).then(function(answer){
-//     var quary = "SELECT * FROM bamazon_product WHERE ?"
-// })
+    connection.query(query, function (err, res) {
 
-// };
+        if (err) throw err;
+        console.table(res);
+        callInq(); 
+    });
+    function callInq() {
+        inquirer.prompt([
+            {
+                name: "productId",
+                type: "input",
+                message: "Enter product ID: "
+            },
+            {
+                name: "add_quantity",
+                type: "input",
+                message: "Enter new amount for product ID: "
+            }
+        ]).then(function (answer) {
+
+            connection.query("SELECT stock_quantity FROM bamazon.products WHERE ?", { product_id: parseInt(answer.productId) }, function (err, res) {
+                if (err) throw err;
+
+                var total_quantity = res[0].stock_quantity + parseInt(answer.add_quantity);
+
+                //update mySQL with entered data
+                var query = "UPDATE products FROM bamazon.products SET ? WHERE ?"
+
+                var id = parseInt(answer.productId);
+                connection.query(query, [{ stock_quantity: total_quantity }, { product_id: id }], function (err, res) {
+
+                    console.log("res[0].stock_quantity");
+                })
+            })
+        })
+    }
+};
 
 
 
@@ -130,8 +153,27 @@ function viewLowQuantity() {
 // //create a function that adds a new product line to an inventory 
 // function addNewProduct() {
 
-
-
+//     inquirer.prompt([
+//         {
+//             name: "d_name",
+//             type: "input",
+//             message: "Enter Product Name: "
+//         },
+//         {
+//             name: "department_name",
+//             type: "input",
+//             message: "Enter Product Department: "
+//         },
+//         {
+//             name: "price",
+//             type: "input",
+//             message: "Enter Product Sell Price: "
+//         },
+//         {
+//             name: "",
+//             type: "input",
+//             message: "Enter Product Sell Price: "
+//         },
 
 
 // }
